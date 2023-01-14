@@ -54,6 +54,29 @@ class Product {
         console.log(err);
       });
   }
+
+  static updateById(id, title, price, imageUrl, description) {
+    const db = getDb();
+    return db
+      .collection("products")
+      .updateOne(
+        { _id: mongodb.ObjectId(id) },
+        {
+          $set: {
+            title: title,
+            price: price,
+            imageUrl: imageUrl,
+            description: description,
+          },
+        }
+      )
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
 module.exports = Product;
