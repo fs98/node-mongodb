@@ -77,6 +77,19 @@ class Product {
         console.log(err);
       });
   }
+
+  static destroy(id) {
+    const db = getDb();
+    return db
+      .collection("products")
+      .deleteOne({
+        _id: mongodb.ObjectId(id),
+      })
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => console.log(err));
+  }
 }
 
 module.exports = Product;
