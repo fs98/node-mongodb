@@ -8,6 +8,21 @@ class Product {
     this.description = description;
   }
 
+  static getAll() {
+    const db = getDb();
+    return db
+      .collection("products")
+      .find()
+      .toArray()
+      .then((products) => {
+        console.log(products);
+        return products;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   store() {
     const db = getDb();
     return db
