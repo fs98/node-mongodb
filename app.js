@@ -30,16 +30,13 @@ app.use((req, res, next) => {
           .store()
           .then((result) => {
             req.user = newUser;
-            console.log("USER CREATED");
             next();
           })
           .catch((err) => {
             console.log(err);
           });
       } else {
-        req.user = user;
-        console.log("USER ALREADY EXISTED");
-        console.log(user);
+        req.user = new User(user.name, user.email, null, user._id);
         next();
       }
     })
