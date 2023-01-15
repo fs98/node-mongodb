@@ -13,18 +13,39 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const mongoConnect = require("./util/database").mongoConnect;
 const shopRoutes = require("./routes/shop");
+const User = require("./models/user");
+const { getDb } = require("./util/database");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  // User.findById(1)
-  //   .then(user => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch(err => console.log(err));
-  next();
+  const db = getDb();
+  db.collection("users")
+    .findOne()
+    .then((user) => {
+      if (!user) {
+        const newUser = new User("Fata", "sefer.fata@gmail.com");
+        newUser
+          .store()
+          .then((result) => {
+            req.user = newUser;
+            console.log("USER CREATED");
+            next();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        req.user = user;
+        console.log("USER ALREADY EXISTED");
+        console.log(user);
+        next();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use("/admin", adminRoutes);
