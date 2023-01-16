@@ -26,7 +26,6 @@ class Product {
 
   static getById(id) {
     const db = getDb();
-    console.log(id);
     return db
       .collection("products")
       .find({
@@ -34,7 +33,6 @@ class Product {
       })
       .toArray()
       .then((product) => {
-        console.log(product);
         return product;
       })
       .catch((err) => {
