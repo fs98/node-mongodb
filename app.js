@@ -25,7 +25,7 @@ app.use((req, res, next) => {
     .findOne()
     .then((user) => {
       if (!user) {
-        const newUser = new User("Fata", "sefer.fata@gmail.com");
+        const newUser = new User("Fata", "sefer.fata@gmail.com", null);
         newUser
           .store()
           .then((result) => {
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
             console.log(err);
           });
       } else {
-        req.user = new User(user.name, user.email, null, user._id);
+        req.user = new User(user.name, user.email, user.cart, user._id);
         next();
       }
     })
