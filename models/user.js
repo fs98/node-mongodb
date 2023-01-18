@@ -93,5 +93,24 @@ class User {
       }
     );
   }
+
+  deleteCartProduct(productId) {
+    const db = getDb();
+
+    const updatedCart = this.cart.items.filter(
+      (cartItem) => cartItem.productId.toString() !== productId.toString()
+    );
+
+    return db.collection("users").updateOne(
+      { _id: mongodb.ObjectId(this._id) },
+      {
+        $set: {
+          cart: {
+            items: updatedCart,
+          },
+        },
+      }
+    );
+  }
 }
 module.exports = User;
