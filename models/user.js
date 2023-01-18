@@ -38,6 +38,31 @@ class User {
       });
   }
 
+  // Cart Methods
+
+  getCart() {
+    const db = getDb();
+    const productIds = this.cart.items.map((product) => product.productId);
+    return db
+      .collection("products")
+      .find({ _id: { $in: productIds } })
+      .toArray()
+      .then((products) => {
+        return products.map((product) => {
+          return {
+            ...product,
+            quantity: this.cart.items.find(
+              (cartItem) =>
+                cartItem.productId.toString() === product._id.toString()
+            ).quantity,
+          };
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   addToCart(product) {
     let updatedCart = {
       items: [...this.cart.items],
