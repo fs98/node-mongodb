@@ -37,7 +37,7 @@ app.use((req, res, next) => {
             console.log(err);
           });
       } else {
-        req.user = new User(user.name, user.email);
+        req.user = new User({ name: user.name, email: user.email });
         next();
       }
     })
