@@ -20,29 +20,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  // db.collection("users")
-  //   .findOne()
-  //   .then((user) => {
-  //     if (!user) {
-  //       const newUser = new User("Fata", "sefer.fata@gmail.com", null);
-  //       newUser
-  //         .store()
-  //         .then((result) => {
-  //           req.user = newUser;
-  //           next();
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         });
-  //     } else {
-  //       req.user = new User(user.name, user.email, user.cart, user._id);
-  //       next();
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  next();
+  User.findOne()
+    .then((user) => {
+      if (!user) {
+        const newUser = new User({
+          name: "Fata",
+          email: "sefer.fata@gmail.com",
+        });
+        newUser
+          .save()
+          .then(() => {
+            req.user = newUser;
+            next();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        req.user = new User(user.name, user.email);
+        next();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use("/admin", adminRoutes);
