@@ -1,3 +1,4 @@
+const { ObjectID } = require("bson");
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -32,9 +33,8 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  Product.getById(prodId)
-    .then((result) => {
-      const product = result[0];
+  Product.findOne({ _id: ObjectID(prodId) })
+    .then((product) => {
       if (!product) {
         return res.redirect("/");
       }
