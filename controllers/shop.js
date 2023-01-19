@@ -1,3 +1,4 @@
+const { ObjectID } = require("bson");
 const Product = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
@@ -17,9 +18,8 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  Product.getById(prodId)
-    .then((result) => {
-      const product = result[0];
+  Product.findOne({ _id: ObjectID(prodId) })
+    .then((product) => {
       res.render("shop/product-detail", {
         product: product,
         pageTitle: product.title,
