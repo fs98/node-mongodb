@@ -118,7 +118,10 @@ class User {
   getOrders() {
     const db = getDb();
 
-    return db.collection("orders").find();
+    return db
+      .collection("orders")
+      .find({ "user._id": mongodb.ObjectId(this._id) })
+      .toArray();
   }
 
   addOrder() {
