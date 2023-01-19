@@ -55,13 +55,12 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
-  Product.updateById(
-    prodId,
-    updatedTitle,
-    updatedPrice,
-    updatedImageUrl,
-    updatedDesc
-  )
+  Product.findByIdAndUpdate(ObjectID(prodId), {
+    title: updatedTitle,
+    price: updatedPrice,
+    imageUrl: updatedImageUrl,
+    description: updatedDesc,
+  })
     .then(() => {
       console.log("UPDATED PRODUCT!");
       res.redirect("/admin/products");
