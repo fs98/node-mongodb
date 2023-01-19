@@ -33,7 +33,7 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  Product.findOne({ _id: ObjectID(prodId) })
+  Product.findById(ObjectID(prodId))
     .then((product) => {
       if (!product) {
         return res.redirect("/");
