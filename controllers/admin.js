@@ -33,7 +33,7 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  Product.findById(ObjectID(prodId))
+  Product.findById(prodId)
     .then((product) => {
       if (!product) {
         return res.redirect("/");
@@ -55,7 +55,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
-  Product.findByIdAndUpdate(ObjectID(prodId), {
+  Product.findOneAndUpdate(prodId, {
     title: updatedTitle,
     price: updatedPrice,
     imageUrl: updatedImageUrl,
@@ -86,7 +86,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.destroy(prodId)
+  Product.findOneAndDelete({ _id: ObjectID(prodId) })
     .then((result) => {
       console.log("DESTROYED PRODUCT");
       res.redirect("/admin/products");
