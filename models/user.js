@@ -115,12 +115,28 @@ class User {
 
   // Order methods
 
+  getOrders() {
+    const db = getDb();
+
+    return db.collection("orders").find();
+  }
+
   addOrder() {
     const db = getDb();
 
-    return db
-      .collection("orders")
-      .insertOne(this.cart)
+    return this.getCart()
+      .then((products) => {
+        const order = {
+          items: products,
+          user: {
+            _id: mongodb.ObjectId(this._id),
+            name: this.name,
+            email: this.email,
+          },
+        };
+
+        return db.collection("orders").insertOne(order);
+      })
       .then((result) => {
         this.cart = { items: [] };
         return db
