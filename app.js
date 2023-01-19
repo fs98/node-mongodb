@@ -22,10 +22,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   User.findOne()
     .then((user) => {
+      console.log("USER", user);
       if (!user) {
         const newUser = new User({
           name: "Fata",
           email: "sefer.fata@gmail.com",
+          cart: {
+            items: [],
+          },
         });
         newUser
           .save()
@@ -37,7 +41,11 @@ app.use((req, res, next) => {
             console.log(err);
           });
       } else {
-        req.user = new User({ name: user.name, email: user.email });
+        req.user = new User({
+          name: user.name,
+          email: user.email,
+          cart: user.cart,
+        });
         next();
       }
     })
