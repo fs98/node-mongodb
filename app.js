@@ -22,7 +22,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   User.findOne()
     .then((user) => {
-      console.log("USER", user);
       if (!user) {
         const newUser = new User({
           name: "Fata",
