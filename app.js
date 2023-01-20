@@ -40,11 +40,7 @@ app.use((req, res, next) => {
             console.log(err);
           });
       } else {
-        req.user = new User({
-          name: user.name,
-          email: user.email,
-          cart: user.cart,
-        });
+        req.user = user;
         next();
       }
     })
