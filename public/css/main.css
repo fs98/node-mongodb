@@ -219,6 +219,8 @@ form {
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 
   #side-menu-toggle {
