@@ -1,12 +1,26 @@
+const User = require("../models/user");
+
 exports.getLogin = (req, res, next) => {
-  console.log(req.body);
+  // const isAuthenticated = req.get("Cookie").split(";")[1]?.trim().split("=")[1];
+  console.log(req.session);
+
   res.render("auth/login", {
     pageTitle: "Login",
     path: "/login",
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
 exports.postLogin = (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/login");
+  const email = req.body.email;
+
+  User.findOne({ email: email })
+    .then((user) => {
+      req.session.user = user;
+      req.session.isLoggedIn = user ? true : false;
+      res.redirect("/login");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
