@@ -1,6 +1,5 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
-const User = require("../models/user");
 
 exports.getProducts = (req, res, next) => {
   Product.find()
@@ -48,10 +47,9 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  req.session.user
+  req.user
     .populate("cart.items.productId")
     .then(({ cart: { items } }) => {
-      console.log(items);
       res.render("shop/cart", {
         path: "/cart",
         pageTitle: "Your Cart",
@@ -65,7 +63,7 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
 
-  req.session.user
+  req.user
     .addToCart(prodId)
     .then((result) => {
       console.log("RESULT", result);
@@ -79,7 +77,7 @@ exports.postCart = (req, res, next) => {
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
 
-  req.session.user
+  req.user
     .removeFromCart(prodId)
     .then(() => {
       console.log("PRODUCT DELETED");
@@ -91,7 +89,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.session.user
+  req.user
     .populate("cart.items.productId")
     .then(({ cart: { items } }) => {
       console.log("ITEMS", items);
