@@ -30,6 +30,11 @@ exports.getSignUp = (req, res, next) => {
   });
 };
 
+exports.postSignUp = (req, res, next) => {
+  console.log(req.body);
+  res.redirect("/signup");
+};
+
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
