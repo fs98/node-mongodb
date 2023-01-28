@@ -227,3 +227,17 @@ form {
     display: none;
   }
 }
+
+.user-message {
+  margin: auto;
+  width: fit-content;
+  padding: 10px 40px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.user-message--error {
+  border-color: orangered;
+  background-color:mistyrose;
+  color: orangered;
+}
