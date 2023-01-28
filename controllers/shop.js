@@ -88,7 +88,6 @@ exports.postOrder = (req, res, next) => {
   req.user
     .populate("cart.items.productId")
     .then(({ cart: { items } }) => {
-      console.log("ITEMS", items);
       const order = new Order({
         user: {
           userId: req.session.user._id,
