@@ -92,7 +92,7 @@ exports.postOrder = (req, res, next) => {
       const order = new Order({
         user: {
           userId: req.session.user._id,
-          name: req.session.user.name,
+          name: req.session.user.email,
           email: req.session.user.email,
         },
         products: items.map((item) => ({
@@ -106,8 +106,8 @@ exports.postOrder = (req, res, next) => {
       return order.save();
     })
     .then(() => {
-      req.session.user.cart = { items: [] };
-      return req.session.user.save();
+      req.user.cart = { items: [] };
+      return req.user.save();
     })
     .then(() => {
       res.redirect("/orders");
