@@ -46,37 +46,46 @@ exports.getSignUp = (req, res, next) => {
   res.render("auth/signup", {
     pageTitle: "Sign Up",
     path: "/signup",
-    isAuthenticated: req.session.isLoggedIn,
+    errorMessage: req.flash("error"),
   });
 };
 
 exports.postSignUp = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  if (password !== confirmPassword) {
+    req.flash("error", "Passwords do not match.");
+    return res.redirect("/signup");
+  }
 
   User.findOne({
     email: email,
   })
     .then((result) => {
       if (result) {
+        req.flash("error", "This user already exists");
         return res.redirect("/signup");
       }
-      return bcrypt.hash(password, 12);
-    })
-    .then((password) => {
-      const user = new User({
-        name: email,
-        email: email,
-        password: password,
-        cart: { items: [] },
-      });
 
-      return user.save();
+      bcrypt
+        .hash(password, 12)
+        .then((hashedPassword) => {
+          const user = new User({
+            name: email,
+            email: email,
+            password: hashedPassword,
+            cart: { items: [] },
+          });
+
+          return user.save();
+        })
+        .then((result) => {
+          res.redirect("/login");
+        });
     })
-    .then((result) => {
-      res.redirect("/login");
-    })
+
     .catch((err) => {
       console.log(err);
     });
