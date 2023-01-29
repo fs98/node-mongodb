@@ -3,6 +3,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
+const { validationResult } = require("express-validator");
 
 const transporter = nodemailer.createTransport(
   sendgridTransport({
@@ -66,9 +67,15 @@ exports.postSignUp = (req, res, next) => {
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  if (password !== confirmPassword) {
-    req.flash("error", "Passwords do not match.");
-    return res.redirect("/signup");
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    return res.status(422).render("auth/signup", {
+      pageTitle: "Sign Up",
+      path: "/signup",
+      errorMessage: errors.array(),
+    });
   }
 
   User.findOne({
@@ -76,7 +83,7 @@ exports.postSignUp = (req, res, next) => {
   })
     .then((result) => {
       if (result) {
-        req.flash("error", "This user already exists");
+        req.flash("error", { msg: "This user already exists" });
         return res.redirect("/signup");
       }
 
