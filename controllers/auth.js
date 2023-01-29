@@ -18,6 +18,7 @@ exports.getLogin = (req, res, next) => {
     pageTitle: "Login",
     path: "/login",
     errorMessage: req.flash("error"),
+    oldInput: {},
   });
 };
 
@@ -33,6 +34,10 @@ exports.postLogin = (req, res, next) => {
       pageTitle: "Login",
       path: "/login",
       errorMessage: errors.array(),
+      oldInput: {
+        email: email,
+        password: password,
+      },
     });
   }
 
@@ -47,7 +52,7 @@ exports.postLogin = (req, res, next) => {
             res.redirect("/");
           } else {
             req.session.isLoggedIn = false;
-            req.flash("error", "Invalid email or password");
+            req.flash("error", { msg: "Invalid email or password" });
             res.redirect("/login");
           }
         })
@@ -66,6 +71,7 @@ exports.getSignUp = (req, res, next) => {
     pageTitle: "Sign Up",
     path: "/signup",
     errorMessage: req.flash("error"),
+    oldInput: {},
   });
 };
 
@@ -81,6 +87,11 @@ exports.postSignUp = (req, res, next) => {
       pageTitle: "Sign Up",
       path: "/signup",
       errorMessage: errors.array(),
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword,
+      },
     });
   }
 
