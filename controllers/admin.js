@@ -1,4 +1,5 @@
 const { ObjectID } = require("bson");
+const { validationResult } = require("express-validator");
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
@@ -6,6 +7,8 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
+    errorMessage: [],
+    oldInput: {},
   });
 };
 
@@ -15,6 +18,25 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const userId = req.session.user;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      errorMessage: errors.array(),
+      oldInput: {
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description,
+      },
+    });
+  }
+
   const product = new Product({
     title: title,
     price: price,
@@ -45,6 +67,7 @@ exports.getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: true,
         product: product,
+        errorMessage: [],
       });
     })
     .catch((err) => console.log(err));
