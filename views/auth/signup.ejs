@@ -8,13 +8,12 @@
       <main>
         <% if (errorMessage.length> 0) { %>
           <div class="user-message user-message--error">
-            <% console.log(errorMessage) %>
-              <% errorMessage.forEach((message)=> { %>
+            <% errorMessage.forEach((message)=> { %>
 
-                <p>
-                  <%= message.msg %>
-                </p>
-                <% })%>
+              <p>
+                <%= message.msg %>
+              </p>
+              <% })%>
           </div>
           <% } %>
             <form action="/signup" method="post" novalidate>

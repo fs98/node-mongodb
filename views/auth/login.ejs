@@ -8,10 +8,15 @@
       <main>
         <% if (errorMessage.length> 0) { %>
           <div class="user-message user-message--error">
-            <%= errorMessage %>
+            <% errorMessage.forEach((message)=> { %>
+
+              <p>
+                <%= message.msg %>
+              </p>
+              <% })%>
           </div>
           <% } %>
-            <form action="/login" method="post">
+            <form action="/login" method="post" novalidate>
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <div class="form-control">
                 <label for="email">Email</label>
