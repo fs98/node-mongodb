@@ -80,6 +80,24 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: true,
+      product: {
+        title: updatedTitle,
+        price: updatedPrice,
+        imageUrl: updatedImageUrl,
+        description: updatedDesc,
+      },
+      errorMessage: errors.array(),
+    });
+  }
+
   Product.findOneAndUpdate(prodId, {
     title: updatedTitle,
     price: updatedPrice,

@@ -37,7 +37,23 @@ router.get(
   adminController.getEditProduct
 );
 
-router.post("/edit-product", isAuthenticated, adminController.postEditProduct);
+router.post(
+  "/edit-product",
+  isAuthenticated,
+  [
+    body("title", "Please enter a title").isLength({ min: 1 }).trim(),
+    body("imageUrl", "Please enter image url").isLength({ min: 1 }).trim(),
+    body("price", "Please enter a valid price")
+      .isLength({ min: 1 })
+      .isNumeric()
+      .withMessage("Price must not be less than 1")
+      .trim(),
+    body("description", "Please enter a description")
+      .isLength({ min: 1 })
+      .trim(),
+  ],
+  adminController.postEditProduct
+);
 
 router.post(
   "/delete-product",
