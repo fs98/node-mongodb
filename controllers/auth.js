@@ -29,7 +29,6 @@ exports.postLogin = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
     return res.status(422).render("auth/login", {
       pageTitle: "Login",
       path: "/login",
@@ -82,7 +81,6 @@ exports.postSignUp = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
     return res.status(422).render("auth/signup", {
       pageTitle: "Sign Up",
       path: "/signup",
