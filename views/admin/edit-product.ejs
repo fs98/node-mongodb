@@ -44,8 +44,8 @@
                                 <label for="description">Description</label>
                                 <textarea
                                     class="<%= errorMessage.find(err => err.param === 'description') ? 'invalid' : '' %>"
-                                    name="description" id="description" rows="5"><% if (editing) { %><%= product.description %><% } else { %><%= oldInput.description %><% } %>
-                                </textarea>
+                                    name="description" id="description"
+                                    rows="5"><% if (editing) { %><%= product.description %><% } else { %><%= oldInput.description %><% } %></textarea>
                             </div>
                             <% if (editing) { %>
                                 <input type="hidden" value="<%= product._id %>" name="productId">
