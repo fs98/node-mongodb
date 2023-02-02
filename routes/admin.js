@@ -18,7 +18,7 @@ router.post(
   isAuthenticated,
   [
     body("title", "Please enter a title").isLength({ min: 1 }).trim(),
-    body("imageUrl", "Please enter image url").isLength({ min: 1 }).trim(),
+    // body("image", "Please enter image url").isLength({ min: 1 }).trim(),
     body("price", "Please enter a valid price")
       .isLength({ min: 1 })
       .isNumeric()
@@ -42,7 +42,7 @@ router.post(
   isAuthenticated,
   [
     body("title", "Please enter a title").isLength({ min: 1 }).trim(),
-    body("imageUrl", "Please enter image url").isLength({ min: 1 }).trim(),
+    // body("image", "Please enter image url").isLength({ min: 1 }).trim(),
     body("price", "Please enter a valid price")
       .isLength({ min: 1 })
       .isNumeric()
