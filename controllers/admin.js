@@ -97,7 +97,7 @@ exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const updatedImageUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedDesc = req.body.description;
 
   const errors = validationResult(req);
@@ -111,22 +111,37 @@ exports.postEditProduct = (req, res, next) => {
       product: {
         title: updatedTitle,
         price: updatedPrice,
-        imageUrl: updatedImageUrl,
         description: updatedDesc,
       },
       errorMessage: errors.array(),
     });
   }
 
-  Product.findOneAndUpdate(prodId, {
+  const product = {
     title: updatedTitle,
     price: updatedPrice,
-    imageUrl: updatedImageUrl,
     description: updatedDesc,
-  })
-    .then(() => {
-      console.log("UPDATED PRODUCT!");
-      res.redirect("/admin/products");
+  };
+
+  if (image) {
+    product.imageUrl = image.path;
+  }
+
+  Product.findById(prodId)
+    .then((product) => {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
+      }
+      product.title = updatedTitle;
+      product.price = updatedPrice;
+      product.description = updatedDesc;
+      if (image) {
+        product.imageUrl = image.path;
+      }
+      return product.save().then((result) => {
+        console.log("UPDATED PRODUCT!");
+        res.redirect("/admin/products");
+      });
     })
     .catch((err) => {
       const error = new Error(err);
