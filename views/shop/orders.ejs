@@ -13,6 +13,7 @@
                                 <li class="orders__item">
                                     <h1>Order - # <%= order._id %>
                                     </h1>
+                                    <a href="/orders/<%= order._id %>">Download invoice</a>
                                     <ul class="orders__products">
                                         <% order.products.forEach(product=> { %>
                                             <li class="orders__products-item">
